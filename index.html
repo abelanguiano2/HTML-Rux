@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AntiVirus Pro 2025 - Detector Avanzado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #0f2027);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #b0c4de;
+            opacity: 0.9;
+        }
+
+        .scanner-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .scan-display {
+            background: #000;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            min-height: 200px;
+            border: 2px solid #00ff88;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            animation: scanLine 2s linear infinite;
+        }
+
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .scan-text {
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+            opacity: 0;
+            animation: typewriter 0.5s ease-in forwards;
+        }
+
+        .scan-text.show {
+            opacity: 1;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            overflow: hidden;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .scan-btn {
+            background: linear-gradient(45deg, #ff4757, #ff6b7a);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 71, 87, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(255, 71, 87, 0.5);
+        }
+
+        .scan-btn:active {
+            transform: translateY(0);
+        }
+
+        .scan-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .virus-alert {
+            background: linear-gradient(45deg, #ff4757, #ff3742);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #ff1744;
+            animation: pulseRed 1s infinite, shake 0.5s infinite;
+            display: none;
+        }
+
+        .virus-alert.show {
+            display: block;
+        }
+
+        @keyframes pulseRed {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 23, 68, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 23, 68, 0.8); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        .alert-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .alert-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .alert-text {
+            text-align: center;
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .remove-btn {
+            background: linear-gradient(45deg, #28a745, #34ce57);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(40, 167, 69, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .remove-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(40, 167, 69, 0.5);
+        }
+
+        .remove-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-alert {
+            background: linear-gradient(45deg, #dc3545, #e74c3c);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #c82333;
+            animation: pulseError 1s infinite, shake 0.5s infinite;
+            display: none;
+            text-align: center;
+        }
+
+        .error-alert.show {
+            display: block;
+        }
+
+        @keyframes pulseError {
+            0%, 100% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(220, 53, 69, 0.8); }
+        }
+
+        .audio-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .music-btn {
+            background: none;
+            border: none;
+            color: #00ff88;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: scale(1.1);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff88;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -100px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 100px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes typewriter {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="audio-controls">
+        <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
+        <span style="color: #00ff88; font-size: 0.9em;">Música</span>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">🛡️ AntiVirus Pro 2025</div>
+            <div class="subtitle">Sistema de Detección Avanzado</div>
+        </div>
+
+        <div class="scanner-container">
+            <div class="scan-display" id="scanDisplay">
+                <div class="scan-line"></div>
+                <div class="scan-text" id="scanText">
+                    <span class="status-indicator"></span>Sistema listo para escaneo...
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="controls">
+                <button class="scan-btn" id="scanBtn" onclick="startScan()">
+                    🔍 Iniciar Escaneo
+                </button>
+            </div>
+
+            <div class="virus-alert" id="virusAlert">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-title">¡VIRUS DETECTADO!</div>
+                <div class="alert-text">
+                    Se han encontrado 47 amenazas críticas en tu sistema.<br>
+                    <strong>Archivos infectados:</strong> 23<br>
+                    <strong>Malware:</strong> 15<br>
+                    <strong>Spyware:</strong> 9
+                </div>
+                <button class="remove-btn" onclick="removeVirus()">
+                    🛡️ Eliminar Virus
+                </button>
+            </div>
+
+            <div class="error-alert" id="errorAlert">
+                <div class="alert-icon">❌</div>
+                <div class="alert-title">ERROR DE ESCANEO</div>
+                <div class="alert-text">
+                    No se pudieron eliminar las amenazas.<br>
+                    <strong>Inténtalo de nuevo</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales para audio
+        let audioContext;
+        let backgroundMusic = null;
+        let musicPlaying = false;
+
+        // Crear música de fondo usando Web Audio API
+        function createBackgroundMusic() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Crear un nodo de ganancia para controlar el volumen
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.value = 0.1; // Volumen bajo para música de fondo
+            
+            // Función para crear un tono
+            function createTone(frequency, startTime, duration) {
+                const oscillator = audioContext.createOscillator();
+                const envelope = audioContext.createGain();
+                
+                oscillator.connect(envelope);
+                envelope.connect(gainNode);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+                
+                envelope.gain.setValueAtTime(0, startTime);
+                envelope.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+                envelope.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + duration);
+            }
+            
+            // Crear una melodía simple y repetitiva
+            function playMelody() {
+                if (!musicPlaying) return;
+                
+                const now = audioContext.currentTime;
+                const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25]; // C4 a C5
+                
+                for (let i = 0; i < 8; i++) {
+                    createTone(notes[i], now + i * 0.5, 0.4);
+                }
+                
+                // Repetir la melodía
+                setTimeout(() => {
+                    if (musicPlaying) playMelody();
+                }, 4000);
+            }
+            
+            return { playMelody, gainNode };
+        }
+
+        function toggleMusic() {
+            const musicBtn = document.getElementById('musicToggle');
+            
+            if (!musicPlaying) {
+                if (!backgroundMusic) {
+                    backgroundMusic = createBackgroundMusic();
+                }
+                musicPlaying = true;
+                backgroundMusic.playMelody();
+                musicBtn.textContent = '🔇';
+                musicBtn.title = 'Desactivar música';
+            } else {
+                musicPlaying = false;
+                musicBtn.textContent = '🎵';
+                musicBtn.title = 'Activar música';
+            }
+        }
+
+        // Función para reducir gradualmente el volumen de la música
+        function fadeOutMusic() {
+            if (backgroundMusic && musicPlaying) {
+                const gainNode = backgroundMusic.gainNode;
+                const fadeTime = 2; // 2 segundos para fade out
+                gainNode.gain.linearRampToValueAtTime(0.01, audioContext.currentTime + fadeTime);
+            }
+        }
+
+        // Función para restaurar el volumen de la música
+        function fadeInMusic() {
+            if (backgroundMusic && musicPlaying) {
+                const gainNode = backgroundMusic.gainNode;
+                const fadeTime = 1; // 1 segundo para fade in
+                gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + fadeTime);
+            }
+        }
+
+        // Crear partículas de fondo
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Crear sonidos usando Web Audio API
+        function createBeepSound(frequency, duration) {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        function playAlarmSound() {
+            // Sonido de alarma alternando frecuencias
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    createBeepSound(i % 2 === 0 ? 800 : 600, 0.2);
+                }, i * 300);
+            }
+        }
+
+        function playErrorSound() {
+            // Sonido de error - tono descendente
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createBeepSound(400 - (i * 100), 0.5);
+                }, i * 200);
+            }
+        }
+
+        const scanMessages = [
+            "🔍 Iniciando escaneo del sistema...",
+            "📁 Analizando directorio C:\\Windows\\System32...",
+            "🔒 Verificando archivos de registro...",
+            "🌐 Escaneando conexiones de red...",
+            "💾 Revisando memoria RAM...",
+            "📊 Analizando procesos en ejecución...",
+            "🔐 Verificando certificados digitales...",
+            "📂 Escaneando archivos temporales...",
+            "⚡ Detectando actividad sospechosa...",
+            "🚨 ALERTA: Amenazas detectadas!"
+        ];
+
+        function startScan() {
+            const scanBtn = document.getElementById('scanBtn');
+            const scanText = document.getElementById('scanText');
+            const progressBar = document.getElementById('progressBar');
+            const virusAlert = document.getElementById('virusAlert');
+            const errorAlert = document.getElementById('errorAlert');
+            
+            // Fade out de la música de fondo
+            fadeOutMusic();
+            
+            // Desactivar botón
+            scanBtn.disabled = true;
+            scanBtn.textContent = '🔄 Escaneando...';
+            
+            // Ocultar alertas si estaban visibles
+            virusAlert.classList.remove('show');
+            errorAlert.classList.remove('show');
+            
+            // Reiniciar barra de progreso
+            progressBar.style.width = '0%';
+            
+            let messageIndex = 0;
+            let progress = 0;
+            
+            const scanInterval = setInterval(() => {
+                // Actualizar mensaje
+                if (messageIndex < scanMessages.length) {
+                    scanText.innerHTML = `<span class="status-indicator"></span>${scanMessages[messageIndex]}`;
+                    messageIndex++;
+                    
+                    // Sonido de beep cada mensaje
+                    createBeepSound(400 + Math.random() * 200, 0.1);
+                }
+                
+                // Actualizar progreso
+                progress += Math.random() * 15 + 5;
+                if (progress > 100) progress = 100;
+                progressBar.style.width = progress + '%';
+                
+                // Si terminó el escaneo
+                if (progress >= 100 && messageIndex >= scanMessages.length) {
+                    clearInterval(scanInterval);
+                    
+                    setTimeout(() => {
+                        // Mostrar alerta de virus
+                        virusAlert.classList.add('show');
+                        playAlarmSound();
+                        
+                        // Reactivar botón
+                        scanBtn.disabled = false;
+                        scanBtn.textContent = '🔍 Escanear Nuevamente';
+                        
+                        // Actualizar texto final
+                        scanText.innerHTML = '<span class="status-indicator"></span>⚠️ Escaneo completado - AMENAZAS DETECTADAS';
+                        
+                        // Restaurar música de fondo
+                        setTimeout(() => {
+                            fadeInMusic();
+                        }, 3000);
+                        
+                    }, 1000);
+                }
+                
+            }, 800);
+        }
+
+        function removeVirus() {
+            const virusAlert = document.getElementById('virusAlert');
+            const errorAlert = document.getElementById('errorAlert');
+            const scanText = document.getElementById('scanText');
+            
+            // Ocultar alerta de virus
+            virusAlert.classList.remove('show');
+            
+            // Simular proceso de eliminación por 2 segundos
+            scanText.innerHTML = '<span class="status-indicator"></span>🛡️ Eliminando amenazas...';
+            
+            setTimeout(() => {
+                // Mostrar error
+                errorAlert.classList.add('show');
+                playErrorSound();
+                
+                // Actualizar texto
+                scanText.innerHTML = '<span class="status-indicator"></span>❌ Error en el proceso de eliminación';
+                
+                // Ocultar error después de 4 segundos
+                setTimeout(() => {
+                    errorAlert.classList.remove('show');
+                    scanText.innerHTML = '<span class="status-indicator"></span>Sistema listo para escaneo...';
+                }, 4000);
+                
+            }, 2000);
+        }
+
+        // Inicializar partículas al cargar la página
+        window.addEventListener('load', () => {
+            createParticles();
+            // Iniciar música automáticamente
+            setTimeout(() => {
+                toggleMusic();
+            }, 1000);
+        });
+
+        // Efecto de parpadeo en el título
+        setInterval(() => {
+            const logo = document.querySelector('.logo');
+            logo.style.textShadow = logo.style.textShadow === 'none' ? 
+                '0 0 20px rgba(0, 255, 136, 0.8)' : 
+                '0 0 20px rgba(0, 255, 136, 0.5)';
+        }, 2000);
+    </script>
+</body>
+</html>
